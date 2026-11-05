@@ -1,0 +1,49 @@
+MathsBlade – turn on real student accounts (Firebase, free, ~10 minutes)
+=======================================================================
+
+Until you do this, Sign up / Sign in runs in DEMO MODE: accounts are saved
+only in that student's browser. With Firebase, students get real accounts
+that work on any phone or computer, plus "Continue with Google" and
+"Forgot password" emails.
+
+1. Go to https://console.firebase.google.com and click "Create a project".
+   Name it "mathsblade". Google Analytics is optional.
+
+2. In the project, open Build > Authentication > Get started.
+   On the "Sign-in method" tab, enable:
+   - Email/Password
+   - Google (choose your support email)
+
+3. Still in Authentication, open Settings > Authorized domains and add
+   your website's domain (for example mathsblade.in or yoursite.netlify.app).
+
+4. Click the gear icon > Project settings > General. Under "Your apps",
+   click the web icon (</>), register an app named "MathsBlade web".
+   Firebase shows a firebaseConfig object like:
+
+     const firebaseConfig = {
+       apiKey: "AIza…",
+       authDomain: "mathsblade.firebaseapp.com",
+       projectId: "mathsblade",
+       appId: "1:…:web:…"
+     };
+
+5. Open js/config.js, find this line:
+       const FIREBASE_CONFIG = null;
+   and replace null with the object, for example:
+       const FIREBASE_CONFIG = {apiKey:"AIza…",authDomain:"mathsblade.firebaseapp.com",projectId:"mathsblade",appId:"1:…:web:…"};
+   Save and upload the site. (This config is meant to be public; it is safe
+   to put in the page.)
+
+6. Optional: Authentication > Templates lets you brand the password-reset
+   email with the MathsBlade name.
+
+Where student details go
+- Name, email and password: Firebase Authentication (you can see users in
+  the Firebase console > Authentication > Users).
+- School and phone: sent to your Google Sheet ("Registrations" tab) if you
+  set up the leaderboard sheet (README.txt), and saved on the student's device.
+
+Note: real accounts and the shared leaderboard only work on your own
+website. On the claude.ai preview link, students sign in with their Claude
+account instead.

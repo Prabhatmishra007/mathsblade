@@ -1,0 +1,38 @@
+MathsBlade – connect the shared leaderboard (about 5 minutes)
+=============================================================
+
+Without this step, the leaderboard on your own website only shows scores
+saved on each student's own device. Follow these steps once to share it.
+
+1. Open Google Sheets and create a new, blank spreadsheet.
+   Name it something like "MathsBlade Board Exam".
+
+2. In the sheet, click Extensions > Apps Script.
+
+3. Delete the sample code and paste everything from
+   leaderboard-apps-script.gs. Click Save.
+
+4. Click Deploy > New deployment.
+   - Select type: Web app
+   - Execute as: Me
+   - Who has access: Anyone
+   Click Deploy and allow the permissions Google asks for.
+
+5. Copy the Web app URL (it ends in /exec).
+
+6. Open js/config.js in a text editor, find this line:
+       const LEADERBOARD_SHEET_URL = "";
+   and paste your URL between the quotes. Save and upload the site.
+
+What you get
+- "Registrations" sheet: every student who starts a paper (name, school, email, phone).
+- "Scores" sheet: every submitted score with full contact details.
+- The public leaderboard shows only first name + surname initial, school and scores.
+  Emails and phone numbers never leave your sheet.
+- To mark Sections B–E yourself, type a total in the "Teacher total"
+  column. The leaderboard will use it and label the row "teacher-checked".
+
+If you edit the script later: Deploy > Manage deployments > Edit > New version.
+
+Privacy note: students may be under 18. Keep the sheet private and use the
+contact details only for MathsBlade results and updates.

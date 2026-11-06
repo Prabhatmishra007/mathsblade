@@ -13,4 +13,12 @@ const LEADERBOARD_SHEET_URL = "";
 
 /* Real student accounts: paste your Firebase web config object
    (see setup/ACCOUNTS-firebase-setup.txt). Leave null for demo mode. */
-const FIREBASE_CONFIG = null;
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDIGwBInIZYz437XS2FZmUTxdzuL28Vz7I",
+  authDomain: "mathsblade-b1fcd.firebaseapp.com",
+  projectId: "mathsblade-b1fcd",
+  storageBucket: "mathsblade-b1fcd.firebasestorage.app",
+  messagingSenderId: "301934103842",
+  appId: "1:301934103842:web:0791e52443ed142066297b",
+  measurementId: "G-E7EELY0T5N"
+};

@@ -16,9 +16,17 @@ async function pbkdf2(pw,saltHex){
 }
 function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement("script"); s.src=src; s.onload=res; s.onerror=()=>rej(new Error("load "+src)); document.head.appendChild(s); }); }
 async function loadFirebase(){
-  await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-app-compat.js`);
-  await loadScript(`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/firebase-auth-compat.js`);
-  if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+  /* Official Google CDN first, jsDelivr as a backup */
+  const hosts=[`https://www.gstatic.com/firebasejs/${FB_VER}/`,`https://cdn.jsdelivr.net/npm/firebase@${FB_VER}/`];
+  let lastErr;
+  for(const h of hosts){
+    try{
+      if(!window.firebase) await loadScript(h+"firebase-app-compat.js");
+      if(!(window.firebase&&firebase.auth)) await loadScript(h+"firebase-auth-compat.js");
+      if(window.firebase&&firebase.auth){ if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG); return; }
+    }catch(e){ lastErr=e; console.warn("MathsBlade: Firebase load failed from",h,e); }
+  }
+  throw lastErr||new Error("Firebase not available");
 }
 const isComplete=u=>!!(u&&u.name&&u.school&&u.email&&u.phone);
 function fbUser(u){ const x=jget("mb-profile-"+u.uid,{}); const r={uid:u.uid,provider:"firebase",email:(u.email||"").toLowerCase(),name:x.name||u.displayName||"",school:x.school||"",phone:x.phone||""}; r.complete=isComplete(r); return r; }
@@ -36,7 +44,7 @@ AUTH.init=function(){
       try{
         await loadFirebase(); AUTH.mode="firebase";
         await new Promise(res=>{ let first=true; firebase.auth().onAuthStateChanged(u=>{ AUTH.user=u?fbUser(u):null; if(first){first=false;res();} else AUTH.changed(); }); });
-      }catch(e){ AUTH.mode="local"; }
+      }catch(e){ console.error("MathsBlade: Firebase could not start, falling back to demo mode.",e); AUTH.mode="local"; }
     }else AUTH.mode="local";
     if(AUTH.mode==="local"){ const em=jget("mb-session",null), acc=jget("mb-accounts",{}); AUTH.user=em&&acc[em]?localUser(em,acc[em]):null; }
     AUTH.sync();
